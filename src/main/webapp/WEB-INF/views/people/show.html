@@ -5,7 +5,9 @@
     <title>Person</title>
 </head>
 <body>
-    <p th:text="${person.getName()}">person</p>
-    <p th:text="${person.getId()}">id</p>
+    <p th:utext="${person.getName()}">person</p>
+    <p th:utext="${person.getId()}">id</p>
+    <br/>
+    <a href="/people">Back</a>
 </body>
 </html>

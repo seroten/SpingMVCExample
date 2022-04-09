@@ -9,13 +9,13 @@ import java.util.List;
 @Component
 public class PersonDAO {
     private List<Person> people;
-    private static int count = 0;
+    private static int count;
 
     {
         people = new ArrayList<>();
-        people.add(new Person(count++, "Bob"));
-        people.add(new Person(count++, "Tom"));
-        people.add(new Person(count++, "John"));
+        people.add(new Person(++count, "Bob"));
+        people.add(new Person(++count, "Tom"));
+        people.add(new Person(++count, "John"));
     }
 
     public List<Person> index() {
@@ -24,5 +24,10 @@ public class PersonDAO {
 
     public Person show(int id) {
         return people.stream().filter(people -> people.getId() == id).findAny().orElse(null);
+    }
+
+    public void save(Person person) {
+        person.setId(++count);
+        people.add(person);
     }
 }
