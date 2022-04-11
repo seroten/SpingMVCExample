@@ -4,6 +4,7 @@ import org.example.models.Person;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -13,9 +14,9 @@ public class PersonDAO {
 
     {
         people = new ArrayList<>();
-        people.add(new Person(++count, "Bob"));
-        people.add(new Person(++count, "Tom"));
-        people.add(new Person(++count, "John"));
+        people.add(new Person(++count, "Bob", 25, "bob@gmail.com"));
+        people.add(new Person(++count, "Tom", 43, "tom32@mail.ru"));
+        people.add(new Person(++count, "John", 32, "john23@yandex.com"));
     }
 
     public List<Person> index() {
@@ -34,10 +35,14 @@ public class PersonDAO {
 
     public void update(int id, Person person) {
         Person personToBeUpdated = show(id);
+
         personToBeUpdated.setName(person.getName());
+        personToBeUpdated.setAge(person.getAge());
+        personToBeUpdated.setEmail(person.getEmail());
     }
 
     public void delete(int id) {
-        people.remove(id);
+        people.removeIf(person -> person.getId() == id);
+        System.out.println("id=" + id + " deleted");
     }
 }
