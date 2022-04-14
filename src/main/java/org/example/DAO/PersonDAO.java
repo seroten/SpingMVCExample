@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,6 +17,7 @@ public class PersonDAO {
     private static final String PASSWORD = "4321";
 
     private static Connection connection;
+    private Person person;
 
     static {
         try {
@@ -37,15 +37,8 @@ public class PersonDAO {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM \"Person\"");
-
             while (resultSet.next()) {
-                Person person = new Person();
-
-                person.setId(resultSet.getInt("id"));
-                person.setName(resultSet.getString("name"));
-                person.setAge(resultSet.getInt("age"));
-                person.setEmail(resultSet.getString("email"));
-
+                setAllFieldPerson(resultSet);
                 people.add(person);
             }
         } catch (SQLException e) {
@@ -56,19 +49,13 @@ public class PersonDAO {
     }
 
     public Person show(int id) {
-        Person person = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT * FROM \"Person\" WHERE id = ?");
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             resultSet.next();
-            person = new Person();
-            person.setId(resultSet.getInt("id"));
-            person.setName(resultSet.getString("name"));
-            person.setAge(resultSet.getInt("age"));
-            person.setEmail(resultSet.getString("email"));
+            setAllFieldPerson(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,5 +98,18 @@ public class PersonDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Person setAllFieldPerson(ResultSet resultSet) {
+        person = new Person();
+        try {
+            person.setId(resultSet.getInt("id"));
+            person.setName(resultSet.getString("name"));
+            person.setAge(resultSet.getInt("age"));
+            person.setEmail(resultSet.getString("email"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return person;
     }
 }
